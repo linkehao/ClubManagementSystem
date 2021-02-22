@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acm.clubManagementSystem.mapper.team.TeamMapper" >
+  <resultMap id="BaseResultMap" type="com.acm.clubManagementSystem.entity.team.Team" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="sid" property="sid" jdbcType="VARCHAR" />
+    <result column="mentor_id" property="mentorId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, team_name, sid, mentor_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from team_table
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from team_table
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.acm.clubManagementSystem.entity.team.Team" >
+    insert into team_table (id, team_name, sid, 
+      mentor_id)
+    values (#{id,jdbcType=VARCHAR}, #{teamName,jdbcType=VARCHAR}, #{sid,jdbcType=VARCHAR}, 
+      #{mentorId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.acm.clubManagementSystem.entity.team.Team" >
+    insert into team_table
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="teamName != null" >
+        team_name,
+      </if>
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="mentorId != null" >
+        mentor_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="teamName != null" >
+        #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="sid != null" >
+        #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="mentorId != null" >
+        #{mentorId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.acm.clubManagementSystem.entity.team.Team" >
+    update team_table
+    <set >
+      <if test="teamName != null" >
+        team_name = #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="sid != null" >
+        sid = #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="mentorId != null" >
+        mentor_id = #{mentorId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.acm.clubManagementSystem.entity.team.Team" >
+    update team_table
+    set team_name = #{teamName,jdbcType=VARCHAR},
+      sid = #{sid,jdbcType=VARCHAR},
+      mentor_id = #{mentorId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+
+  <select id="selectAllByCondition" resultMap="BaseResultMap" >
+    select t.id, t.team_name, t.sid, t.mentor_id, count(type) total
+    from team_table t
+    left join award_table a
+    on t.id=a.associated_id
+    <where>
+      <if test="teamName != null and teamName !=''">
+        and t.team_name like #{teamName}
+      </if>
+      <if test="mentorId != null and mentorId !=''">
+        and t.mentor_id=#{mentorId}
+      </if>
+    </where>
+    group by t.id
+    <if test="sortBy != null and sortBy != '' and ascdesc !=null and ascdesc !=''">
+      order by ${sortBy} ${ascdesc}
+    </if>
+
+  </select>
+
+
+  <select id="selectBySId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from team_table
+    where sid = #{sid,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectByTeamName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from team_table
+    where team_name = #{teamName,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectByMentorId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from team_table
+    where id = #{mid,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

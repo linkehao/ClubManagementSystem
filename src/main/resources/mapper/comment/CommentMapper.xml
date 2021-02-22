@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acm.clubManagementSystem.mapper.comment.CommentMapper" >
+  <resultMap id="BaseResultMap" type="com.acm.clubManagementSystem.entity.comment.Comment" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="sid" property="sid" jdbcType="VARCHAR" />
+    <result column="tid" property="tid" jdbcType="VARCHAR" />
+    <result column="comment_time" property="commentTime" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.acm.clubManagementSystem.entity.comment.Comment" extends="BaseResultMap" >
+    <result column="comment" property="comment" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sid, tid, comment_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    `comment`
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment_table
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from comment_table
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.acm.clubManagementSystem.entity.comment.Comment" >
+    insert into comment_table (id, sid, tid, 
+      comment_time, `comment`)
+    values (#{id,jdbcType=VARCHAR}, #{sid,jdbcType=VARCHAR}, #{tid,jdbcType=VARCHAR},
+      #{commentTime,jdbcType=DATE}, #{comment,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.acm.clubManagementSystem.entity.comment.Comment" >
+    insert into comment_table
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="tid != null" >
+        tid,
+      </if>
+      <if test="commentTime != null" >
+        comment_time,
+      </if>
+      <if test="comment != null" >
+        `comment`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sid != null" >
+        #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="tid != null" >
+        #{tid,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTime != null" >
+        #{commentTime,jdbcType=DATE},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.acm.clubManagementSystem.entity.comment.Comment" >
+    update comment_table
+    <set >
+      <if test="sid != null" >
+        sid = #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="tid != null" >
+        tid = #{tid,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTime != null" >
+        comment_time = #{commentTime,jdbcType=DATE},
+      </if>
+      <if test="comment != null" >
+        `comment` = #{comment,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.acm.clubManagementSystem.entity.comment.Comment" >
+    update comment_table
+    set sid = #{sid,jdbcType=VARCHAR},
+      tid = #{tid,jdbcType=VARCHAR},
+      comment_time = #{commentTime,jdbcType=DATE},
+      `comment` = #{comment,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.acm.clubManagementSystem.entity.comment.Comment" >
+    update comment_table
+    set sid = #{sid,jdbcType=VARCHAR},
+      tid = #{tid,jdbcType=VARCHAR},
+      comment_time = #{commentTime,jdbcType=DATE}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+
+  <select id="selectByTId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment_table
+    where tid = #{tid,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectAllByCondition" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment_table
+    <where>
+      <if test="tid != null and tid !=''">
+        and tid = #{tid}
+      </if>
+      <if test="startTime != null and startTime !=''">
+        and #{startTime,jdbcType=DATE} &lt;= s.grade
+      </if>
+      <if test="endTime !=null and endTime !=''">
+        and s.grade &lt;= #{endTime,jdbcType=DATE}
+      </if>
+    </where>
+    <if test="sortBy != null and sortBy != '' and ascdesc !=null and ascdesc !=''">
+      order by ${sortBy} ${ascdesc}
+    </if>
+  </select>
+
+
+  <select id="selectAll" resultMap="ResultMapWithBLOBs" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment_table
+  </select>
+
+</mapper>

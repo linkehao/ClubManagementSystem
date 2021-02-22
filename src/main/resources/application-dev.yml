@@ -1,0 +1,21 @@
+server:
+  port: 8889
+
+spring:
+  application:
+    name: ACM-Syetem
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/acm?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+  type-aliases-package: com.acm.clubManagementSystem.entity.*
+  configuration:
+    map-underscore-to-camel-case: true
+
+

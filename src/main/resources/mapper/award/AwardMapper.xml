@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acm.clubManagementSystem.mapper.award.AwardMapper" >
+  <resultMap id="BaseResultMap" type="com.acm.clubManagementSystem.entity.award.Award" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="associated_id" property="associatedId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="race_name" property="raceName" jdbcType="VARCHAR" />
+    <result column="award_grade" property="awardGrade" jdbcType="VARCHAR" />
+    <result column="award_time" property="awardTime" jdbcType="DATE" />
+    <result column="awardTime" property="awardTime" jdbcType="DATE" />
+    <result column="sname" property="sname" jdbcType="VARCHAR" />
+    <result column="mentor_id" property="mentorId" jdbcType="VARCHAR" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="sid" property="sid" jdbcType="VARCHAR" />
+
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+
+    <result column="total" property="total" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, associated_id, `type`, race_name, award_grade, award_time, flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from award_table
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from award_table
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.acm.clubManagementSystem.entity.award.Award" >
+    insert into award_table (id, associated_id, `type`, 
+      race_name, award_grade, award_time, 
+      flag)
+    values (#{id,jdbcType=VARCHAR}, #{associatedId,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{raceName,jdbcType=VARCHAR}, #{awardGrade,jdbcType=VARCHAR}, #{awardTime,jdbcType=DATE}, 
+      #{flag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.acm.clubManagementSystem.entity.award.Award" >
+    insert into award_table
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="associatedId != null" >
+        associated_id,
+      </if>
+      <if test="type != null" >
+        `type`,
+      </if>
+      <if test="raceName != null" >
+        race_name,
+      </if>
+      <if test="awardGrade != null" >
+        award_grade,
+      </if>
+      <if test="awardTime != null" >
+        award_time,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="associatedId != null" >
+        #{associatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="raceName != null" >
+        #{raceName,jdbcType=VARCHAR},
+      </if>
+      <if test="awardGrade != null" >
+        #{awardGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="awardTime != null" >
+        #{awardTime,jdbcType=DATE},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.acm.clubManagementSystem.entity.award.Award" >
+    update award_table
+    <set >
+      <if test="associatedId != null" >
+        associated_id = #{associatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="raceName != null" >
+        race_name = #{raceName,jdbcType=VARCHAR},
+      </if>
+      <if test="awardGrade != null" >
+        award_grade = #{awardGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="awardTime != null" >
+        award_time = #{awardTime,jdbcType=DATE},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.acm.clubManagementSystem.entity.award.Award" >
+    update award_table
+    set associated_id = #{associatedId,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      race_name = #{raceName,jdbcType=VARCHAR},
+      award_grade = #{awardGrade,jdbcType=VARCHAR},
+      award_time = #{awardTime,jdbcType=DATE},
+      flag = #{flag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+
+  <select id="selectAllByCondition" resultMap="BaseResultMap">
+    select
+    a.id, a.associated_id , s.`name` as sname, a.type, a.race_name, a.award_grade, s.mentor_id,a.award_time as awardTime
+    from award_table a
+    left join student_table s
+    on a.associated_id=s.id
+    <where>
+      a.flag=0
+      <if test="name != null and name !=''">
+        and s.name like #{name}
+      </if>
+      <if test="mentorId != null and mentorId !=''">
+        and s.mentor_id=#{mentorId}
+      </if>
+      <if test="startTime != null and startTime !=''">
+        and #{startTime,jdbcType=DATE} &lt;= a.award_time
+      </if>
+      <if test="endTime !=null and endTime !=''">
+        and a.award_time &lt;= #{endTime,jdbcType=DATE}
+      </if>
+
+      <if test="type != null and type !=''">
+        and a.type=#{type}
+      </if>
+      <if test="raceName != null and raceName !=''">
+        and a.race_name=#{raceName}
+      </if>
+      <if test="awardGrade != null and awardGrade !=''">
+        and a.award_grade=#{awardGrade}
+      </if>
+    </where>
+    <if test="sortBy != null and sortBy != '' and ascdesc !=null and ascdesc !=''">
+      order by ${sortBy} ${ascdesc}
+    </if>
+  </select>
+
+
+  <select id="selectAwardTeamByCondition" resultMap="BaseResultMap">
+    select
+    a.id, a.associated_id, t.team_name , t.sid, t.mentor_id, a.race_name, a.type, a.award_grade,a.award_time as awardTime
+    from award_table a
+    left join  team_table t
+    on a.associated_id=t.id
+    <where>
+      a.flag=1
+      <if test="teamName != null and teamName !=''">
+        and t.team_name like #{teamName}
+      </if>
+      <if test="mentorId != null and mentorId !=''">
+        and t.mentor_id=#{mentorId}
+      </if>
+      <if test="startTime != null and startTime !=''">
+        and #{startTime,jdbcType=DATE} &lt;= a.award_time
+      </if>
+      <if test="endTime !=null and endTime !=''">
+        and a.award_time &lt;= #{endTime,jdbcType=DATE}
+      </if>
+
+      <if test="type != null and type !=''">
+        and a.type=#{type}
+      </if>
+      <if test="raceName != null and raceName !=''">
+        and a.race_name=#{raceName}
+      </if>
+      <if test="awardGrade != null and awardGrade !=''">
+        and a.award_grade=#{awardGrade}
+      </if>
+    </where>
+    <if test="sortBy != null and sortBy != '' and ascdesc !=null and ascdesc !=''">
+      order by ${sortBy} ${ascdesc}
+    </if>
+  </select>
+
+
+
+  <select id="selectByAwardSummary" resultMap="BaseResultMap">
+    select
+    race_name,`type`,award_grade,count(b.id) as total
+    from award_table a LEFT JOIN
+    (
+    select
+    id,race_name as rn,`type` as ty,award_grade as ag
+    from award_table
+    <where>
+      <if test="startTime != null and startTime !=''">
+        and #{startTime,jdbcType=DATE} &lt;= award_time
+      </if>
+      <if test="endTime !=null and endTime !=''">
+        and award_time &lt;= #{endTime,jdbcType=DATE}
+      </if>
+    </where>
+    ) b on a.race_name=b.rn and a.award_grade=b.ag and a.type=b.ty  and a.id=b.id
+    <where>
+      <if test="type != null and type !=''">
+        and type=#{type}
+      </if>
+      <if test="raceName != null and raceName !=''">
+        and race_name=#{raceName}
+      </if>
+      <if test="awardGrade != null and awardGrade !=''">
+        and award_grade=#{awardGrade}
+      </if>
+    </where>
+    group by race_name,`type`,award_grade
+    <if test="sortBy != null and sortBy != '' and ascdesc !=null and ascdesc !=''">
+      order by ${sortBy} ${ascdesc}
+    </if>
+  </select>
+
+</mapper>

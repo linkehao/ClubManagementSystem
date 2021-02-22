@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acm.clubManagementSystem.mapper.student.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.acm.clubManagementSystem.entity.student.Student" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="grade" property="grade" jdbcType="DATE" />
+    <result column="college" property="college" jdbcType="VARCHAR" />
+    <result column="mentor_id" property="mentorId" jdbcType="VARCHAR" />
+    <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+    <result column="rid" property="rid" jdbcType="VARCHAR" />
+    <result column="role" property="role" jdbcType="VARCHAR" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, `password`, salt, `name`, age, sex, grade, college, mentor_id, team_id, `status`
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from student_table
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from student_table
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.acm.clubManagementSystem.entity.student.Student" >
+    insert into student_table (id, `password`, salt, 
+      `name`, age, sex, grade, 
+      college, mentor_id, team_id, 
+      `status`)
+    values (#{id,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=VARCHAR}, #{grade,jdbcType=DATE}, 
+      #{college,jdbcType=VARCHAR}, #{mentorId,jdbcType=VARCHAR}, #{teamId,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.acm.clubManagementSystem.entity.student.Student" >
+    insert into student_table
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="password != null" >
+        `password`,
+      </if>
+      <if test="salt != null" >
+        salt,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+      <if test="college != null" >
+        college,
+      </if>
+      <if test="mentorId != null" >
+        mentor_id,
+      </if>
+      <if test="teamId != null" >
+        team_id,
+      </if>
+      <if test="status != null" >
+        `status`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=DATE},
+      </if>
+      <if test="college != null" >
+        #{college,jdbcType=VARCHAR},
+      </if>
+      <if test="mentorId != null" >
+        #{mentorId,jdbcType=VARCHAR},
+      </if>
+      <if test="teamId != null" >
+        #{teamId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.acm.clubManagementSystem.entity.student.Student" >
+    update student_table
+    <set >
+      <if test="password != null" >
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade,jdbcType=DATE},
+      </if>
+      <if test="college != null" >
+        college = #{college,jdbcType=VARCHAR},
+      </if>
+      <if test="mentorId != null" >
+        mentor_id = #{mentorId,jdbcType=VARCHAR},
+      </if>
+      <if test="teamId != null" >
+        team_id = #{teamId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.acm.clubManagementSystem.entity.student.Student" >
+    update student_table
+    set `password` = #{password,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=DATE},
+      college = #{college,jdbcType=VARCHAR},
+      mentor_id = #{mentorId,jdbcType=VARCHAR},
+      team_id = #{teamId,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectAllByCondition" resultMap="BaseResultMap">
+    select
+    s.id, s.`password`, s.`name`, s.age, s.sex, s.grade, s.college, s.mentor_id, s.team_id,
+    count(type) total
+    from student_table s
+    left join award_table a
+    on s.id=a.associated_id
+    <where>
+      s.status=0
+      <if test="name != null and name !=''">
+        and s.name like #{name}
+      </if>
+      <if test="college != null and college !=''">
+        and s.college=#{college}
+      </if>
+      <if test="mentorId != null and mentorId !=''">
+        and s.mentor_id=#{mentorId}
+      </if>
+      <if test="startTime != null and startTime !=''">
+        and #{startTime,jdbcType=DATE} &lt;= s.grade
+      </if>
+      <if test="endTime !=null and endTime !=''">
+        and s.grade &lt;= #{endTime,jdbcType=DATE}
+      </if>
+    </where>
+    group by s.id
+    <if test="sortBy != null and sortBy != '' and ascdesc !=null and ascdesc !=''">
+      order by ${sortBy} ${ascdesc}
+    </if>
+  </select>
+
+
+  <select id="selectByTId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from student_table
+    where team_id = #{tid,jdbcType=VARCHAR} and status=0
+  </select>
+
+
+  <select id="selectByMId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from student_table
+    where id = #{mentorId,jdbcType=VARCHAR} and status=1
+  </select>
+
+
+  <select id="selectMentors" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from student_table
+    where status=1
+  </select>
+
+
+
+  <select id="selectByToken" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from student_table
+    where salt=#{token,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectAllByUserInfo" resultMap="BaseResultMap">
+    select
+    s.id, s.`password`, s.`name`,r.id as rid,r.role
+    from student_table s
+    left join sr_table sr
+    on s.id=sr.sid
+    left join role_table r
+    on sr.rid=r.id
+    <where>
+      <if test="name != null and name !=''">
+        and s.name like #{name}
+      </if>
+      <if test="rid != null and rid !=''">
+        and r.id = #{rid}
+      </if>
+      <if test="id != null and id !=''">
+        and s.id like #{id}
+      </if>
+      <if test="role != null and role !=''">
+        and r.role=#{role}
+      </if>
+    </where>
+  </select>
+
+
+  <select id="selectByMentorId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from student_table
+    where mentor_id=#{mentorId,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

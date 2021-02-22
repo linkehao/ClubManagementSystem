@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acm.clubManagementSystem.mapper.topic.TopicMapper" >
+  <resultMap id="BaseResultMap" type="com.acm.clubManagementSystem.entity.topic.Topic" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="sid" property="sid" jdbcType="VARCHAR" />
+    <result column="topic_title" property="topicTitle" jdbcType="VARCHAR" />
+    <result column="difficulty_level" property="difficultyLevel" jdbcType="VARCHAR" />
+
+    <result column="name" property="name" jdbcType="VARCHAR" />
+
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.acm.clubManagementSystem.entity.topic.Topic" extends="BaseResultMap" >
+    <result column="topic_content" property="topicContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sid, topic_title, difficulty_level, create_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    topic_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from topic_table
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from topic_table
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.acm.clubManagementSystem.entity.topic.Topic" >
+    insert into topic_table (id, sid, topic_title, 
+      difficulty_level, create_time, topic_content
+      )
+    values (#{id,jdbcType=VARCHAR}, #{sid,jdbcType=VARCHAR}, #{topicTitle,jdbcType=VARCHAR}, 
+      #{difficultyLevel,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, #{topicContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.acm.clubManagementSystem.entity.topic.Topic" >
+    insert into topic_table
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="topicTitle != null" >
+        topic_title,
+      </if>
+      <if test="difficultyLevel != null" >
+        difficulty_level,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="topicContent != null" >
+        topic_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sid != null" >
+        #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="topicTitle != null" >
+        #{topicTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="difficultyLevel != null" >
+        #{difficultyLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="topicContent != null" >
+        #{topicContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.acm.clubManagementSystem.entity.topic.Topic" >
+    update topic_table
+    <set >
+      <if test="sid != null" >
+        sid = #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="topicTitle != null" >
+        topic_title = #{topicTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="difficultyLevel != null" >
+        difficulty_level = #{difficultyLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="topicContent != null" >
+        topic_content = #{topicContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.acm.clubManagementSystem.entity.topic.Topic" >
+    update topic_table
+    set sid = #{sid,jdbcType=VARCHAR},
+      topic_title = #{topicTitle,jdbcType=VARCHAR},
+      difficulty_level = #{difficultyLevel,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=DATE},
+      topic_content = #{topicContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.acm.clubManagementSystem.entity.topic.Topic" >
+    update topic_table
+    set sid = #{sid,jdbcType=VARCHAR},
+      topic_title = #{topicTitle,jdbcType=VARCHAR},
+      difficulty_level = #{difficultyLevel,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=DATE}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+
+  <select id="selectAllByCondition" resultMap="ResultMapWithBLOBs">
+    select
+    t.id, sid, topic_title, difficulty_level, create_time ,
+    topic_content,s.name
+    from topic_table t left join student_table s
+    on t.sid=s.id
+    <where>
+      <if test="name != null and name !=''">
+        and s.name like #{name}
+      </if>
+      <if test="difficultyLevel != null and difficultyLevel !=''">
+        and t.difficulty_level=#{difficultyLevel}
+      </if>
+      <if test="startTime != null and startTime !=''">
+        and #{startTime,jdbcType=DATE} &lt;= t.create_time
+      </if>
+      <if test="endTime !=null and endTime !=''">
+        and t.create_time &lt;= #{endTime,jdbcType=DATE}
+      </if>
+    </where>
+    <if test="sortBy != null and sortBy != '' and ascdesc !=null and ascdesc !=''">
+      order by ${sortBy} ${ascdesc}
+    </if>
+  </select>
+
+
+
+  <select id="selectBySId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from topic_table
+    where sid = #{sid,jdbcType=VARCHAR}
+  </select>
+
+
+</mapper>
