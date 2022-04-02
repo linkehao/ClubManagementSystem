@@ -35,6 +35,7 @@ public class AwardController {
     @GetMapping("/list")
     @ApiOperation(value = "个人获奖信息接口")
     public ResultData<PageInfo<Award>> selectScreen(AwardScreenReqVo vo) {
+        System.out.println(1);
         ResultData<PageInfo<Award>> result = ResultData.success();
         try {
             PageInfo<Award> entitys = service.selectScreen(vo);
